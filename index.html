@@ -40,9 +40,18 @@
     </form>
 
 </body>
-<script src="./valadatior.js"></script>
+<script src="./validator.js"></script>
 <script>
     
+    validator({
+        form : '#form-1',
+        errorSelector : '.form-message',
+        rules : [
+            validator.isRequired('#fullname'),
+            validator.isEmail('#email'),
+            validator.isPassword('#password')
+        ]
+    });
 
 </script>
 </html>
