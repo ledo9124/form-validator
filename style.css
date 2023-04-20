@@ -72,7 +72,7 @@ body {
     height: 26px;
 }
 
-.form-group.invalid input{
+/* .form-group.invalid input{
     background-color: #ff00001c;
     border: 2px solid #ff0000;
     transition: .3s;
@@ -106,7 +106,7 @@ body {
 
 .form-group.valid .form-message {
     color: #03a724;
-}
+} */
 
 .form .form-submit {
     display: block;

@@ -14,25 +14,25 @@
 
         <div class="form-group">
             <label for="fullname" class="form-label">User Name</label>
-            <input type="text" name="fullname" id="fullname" class="fullname" placeholder="VD: Lê Độ">
+            <input type="text" name="fullname" id="fullname" placeholder="VD: Lê Độ">
             <span class="form-message"></span>
         </div>
 
         <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input type="text" name="email" id="email" class="email" placeholder="VD: ledo9124@gmail.com">
+            <input type="text" name="email" id="email" placeholder="VD: ledo9124@gmail.com">
             <span class="form-message"></span>
         </div>
 
         <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" id="password" class="password">
+            <input type="password" name="password" id="password">
             <span class="form-message"></span>
         </div>
 
         <div class="form-group">
             <label for="password-comfirmation" class="form-label">Confirm password</label>
-            <input type="password" name="password-comfirmation" id="password-comfirmation" class="password-comfirmation">
+            <input type="password" name="password-comfirmation" id="password-comfirmation">
             <span class="form-message"></span>
         </div>
 
@@ -45,6 +45,7 @@
     
     validator({
         form : '#form-1',
+        formGroupSelector: '.form-group',
         errorSelector : '.form-message',
         rules : [
             validator.isRequired('#fullname' , 'Vui lòng nhập full name!'),
@@ -55,7 +56,7 @@
             validator.isRequired('#password-comfirmation' , 'Vui lòng nhập comfirm password!'),
             validator.isComfirmed('#password-comfirmation' , function () {
                 return document.querySelector('#form-1 #password').value;
-            } , 'Vui lòng nhập lại đúng mật khẩu!')
+            } , 'Vui lòng nhập lại đúng mật khẩu!'),
         ],
         onSubmit: function(data) {
             console.log(data);
