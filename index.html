@@ -14,34 +14,57 @@
 
         <div class="form-group">
             <label for="fullname" class="form-label">User Name</label>
-            <input type="text" name="fullname" id="fullname" placeholder="VD: Lê Độ">
-            <span class="form-message"></span>
+            <input type="text" rules="required" name="fullname" id="fullname" placeholder="VD: Lê Độ">
+            <span class="form-message" message="Vui lòng nhập fullname!"></span>
         </div>
 
         <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input type="text" name="email" id="email" placeholder="VD: ledo9124@gmail.com">
+            <input type="text" rules="required|email" name="email" id="email" placeholder="VD: ledo9124@gmail.com">
             <span class="form-message"></span>
         </div>
 
         <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" rules="required|password|min:6" name="password" id="password">
             <span class="form-message"></span>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="password-comfirmation" class="form-label">Confirm password</label>
             <input type="password" name="password-comfirmation" id="password-comfirmation">
             <span class="form-message"></span>
-        </div>
+        </div> -->
+
+        <!-- <div class="form-group">
+            <label for="gender" class="form-label">Gender</label>
+            <div>
+                <input type="radio" rules="required"  name="gender" id="gender" value="male">
+                Male
+            </div>
+            <div>
+                <input type="radio" rules="required"  name="gender" id="gender" value="female">
+                Female
+            </div>
+            <div>
+                <input type="radio" rules="required"  name="gender" id="gender" value="orther">
+                Orther
+            </div>
+            <span class="form-message"></span>
+        </div> -->
+
+        <!-- <div class="form-group">
+            <label for="avatar" class="form-label">Avatar</label>
+            <input type="file" rules="required|password|min:6" name="avatar" id="avatar">
+            <span class="form-message"></span>
+        </div> -->
 
         <button class="form-submit">Submit</button>
     </form>
 
 </body>
-<script src="./validator.js"></script>
-<script>
+<!-- <script src="./validator.js"></script> -->
+<!-- <script>
     
     validator({
         form : '#form-1',
@@ -63,5 +86,14 @@
         }
     });
 
+</script> -->
+
+<!-- Validation2 -->
+<script src="./validator2_0.js"></script>
+<script>
+    let form = new Validator('#form-1');
+    form.onSubmit = function(data) {
+        console.log(data);
+    };
 </script>
 </html>
