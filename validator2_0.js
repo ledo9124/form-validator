@@ -1,6 +1,5 @@
 /**
  * * Mong muốn đạt được / Output
- * -Khi dùng khai báo với cú pháp: Validator('selectorForm') => VD: Validator('#form-1');
  * -Có thể sử lý cơ bản tất cả các rules của input;
  * -Tối ưu độ thích nghi với nhiều form
  * -Đầu ra có thể là hành động mặc định của web đối với button trong form,
@@ -11,15 +10,41 @@
  * * Các yêu cầu cơ bản về form khi áp dụng:
  * -Các input sẽ được gọi là một group 
  * -Trong form group yêu cầu có:
+ *      + Thẻ div có class form-group bọc mỗi form input
  *      + input(có name , id , rules) => Attribute của thẻ input,
  *        rules là để khai báo những quy tắc của input (VD: isRequired => Bắt buộc nhập, isEmail ,..),
  *        trong rules có thể chứa nhiều rule và giữa các rule ngăn cách = '|' (VD: rules="isRequired|isEmail").
- *      + Một thẻ có class formMessage(errorMessage => Mong muốn khi invalid) => Attribute,
- *        formMessage có tác dụng là để hiện thị cảnh báo khi invalid or valid.
+ *      + Một thẻ có class form-message(message => Mong muốn khi invalid) => Attribute,
+ *        message có tác dụng là để hiện thị cảnh báo khi invalid or valid (Nếu không có thì message sẽ hiện message mặc định).
+ *  VD : 
+ *      <div class="form-group">
+            <label for="fullname" class="form-label">User Name</label>
+            <input type="text" rules="required" name="fullname" id="fullname" placeholder="VD: Lê Độ">
+            <span class="form-message" message="Vui lòng nhập fullname!"></span>
+        </div>
+
+
+        
+ * * Cú pháp khai báo hàm
+        new Validator(id của form);
+
+        khi muốn lấy ra giá trị của các input 
+        let form = new Validator(selector của form);
+        form.onSubmit = function(data) {
+            console.log(data); //data chính là object chưa các value của input;
+        }
+
+        VD : let form = new Validator('#form-1');
+            form.onSubmit = function(data) {
+                console.log(data);
+            };
  * 
- */
+*/
 
 function Validator(formSelector) {
+
+    // Lấy ra form element trong DOM theo 'formSelector'
+    let formElement = document.querySelector(formSelector);
 
     //Tạo class khi nhập sai và đúng dữ liệu
     const invalidInputStyle = `
@@ -88,35 +113,38 @@ function Validator(formSelector) {
 
     let validatorRules = {
 
-        required : function (value , message) {
-            return value.trim() ? undefined : message || 'Vui lòng nhập trường này!';
+        required : function (value) {
+            return value.trim() ? undefined : 'Vui lòng nhập trường này!';
         },
 
-        email: function(value , message) {
+        email: function(value) {
             const regexEmail = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
-            return regexEmail.test(value) ? undefined : message || 'Vui lòng nhập email!';
+            return regexEmail.test(value) ? undefined : 'Vui lòng nhập email!';
         },
 
-        password: function(value , message) {
+        password: function(value) {
             const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{0,}$/;
-            return regexPassword.test(value) ? undefined : message || 'Mật khẩu bao gồm chữ in hoa , số  , ký tự!';
+            return regexPassword.test(value) ? undefined : 'Mật khẩu bao gồm chữ in hoa , số  , ký tự!';
         },
 
         min: function(min) {
-            return function(value , message) {
-                return value.length >= min ? undefined : message || `Vui lòng nhập ít nhất ${min} ký tự!`;
+            return function(value) {
+                return value.length >= min ? undefined : `Vui lòng nhập ít nhất ${min} ký tự!`;
             }
         },
 
         max: function(max) {
-            return function(value , message) {
-                return value.length <= max ? undefined : message || `Vui lòng nhập tối đa ${max} ký tự!`;
+            return function(value) {
+                return value.length <= max ? undefined : `Vui lòng nhập tối đa ${max} ký tự!`;
             }
         },
-    };
 
-    // Lấy ra form element trong DOM theo 'formSelector'
-    let formElement = document.querySelector(formSelector);
+        comfirm: function(comfirm) {
+            return function (value) {
+                return value === formElement.querySelector(comfirm).value ? undefined : 'Vui lòng nhập đúng dữ liệu!';
+            }
+        }
+    };
 
     // Chỉ thực hiện khi có formElement
     if (formElement) {
@@ -157,34 +185,34 @@ function Validator(formSelector) {
                         case 'radio':
                         case 'checkbox':
                             errorMessage = rules[index](
-                                formElement.querySelector('#' + event.target.name + ':checked') ? 'true' : ''
+                                formElement.querySelector('#' + event.target.id + ':checked') ? 'true' : ''
                             );
                             break;
                         default:
                             errorMessage = rules[index](event.target.value);
                     };
+                    console.log(errorMessage);
                     return errorMessage;
                 });
 
                 // Thực hiện hiện thị errorMessage ra UI
-                if (errorMessage) {
-                    let formGroup = event.target.closest('.form-group');
-                    let formMessage;
-                    if (formGroup) {
-                        formMessage = formGroup.querySelector('.form-message');
-                    };
-    
-                    if (formMessage) {
-                        if (errorMessage) {
-                            if (formMessage.getAttribute('message')) {
-                                formMessage.innerText = formMessage.getAttribute('message');
-                            }
+                let formGroup = event.target.closest('.form-group');
+                let formMessage;
+                if (formGroup) {
+                    formMessage = formGroup.querySelector('.form-message');
+                };
+
+                if (formMessage) {
+                    if (errorMessage) {
+                        if (formMessage.getAttribute('message')) {
+                            formMessage.innerText = formMessage.getAttribute('message');
+                        }else {
                             formMessage.innerText = errorMessage;
-                            invalidValue(formGroup);
-                        } else {
-                            formMessage.innerText = 'Hợp lệ!';
-                            validValue(formGroup);
-                        };
+                        }
+                        invalidValue(formGroup);
+                    } else {
+                        formMessage.innerText = 'Hợp lệ!';
+                        validValue(formGroup);
                     };
                 };
 
