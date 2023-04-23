@@ -12,8 +12,8 @@
  * -Trong form group yêu cầu có:
  *      + Thẻ div có class form-group bọc mỗi form input
  *      + input(có name , id , rules) => Attribute của thẻ input,
- *        rules là để khai báo những quy tắc của input (VD: isRequired => Bắt buộc nhập, isEmail ,..),
- *        trong rules có thể chứa nhiều rule và giữa các rule ngăn cách = '|' (VD: rules="isRequired|isEmail").
+ *        rules là để khai báo những quy tắc của input (VD: required => Bắt buộc nhập, email ,..),
+ *        trong rules có thể chứa nhiều rule và giữa các rule ngăn cách = '|' (VD: rules="required|email").
  *      + Một thẻ có class form-message(message => Mong muốn khi invalid) => Attribute,
  *        message có tác dụng là để hiện thị cảnh báo khi invalid or valid (Nếu không có thì message sẽ hiện message mặc định).
  *  VD : 
@@ -23,6 +23,7 @@
             <span class="form-message" message="Vui lòng nhập fullname!"></span>
         </div>
 
+**  Tên các rules xem ở phần validatorRules VD: required , email , password , comfirm ,...
 
         
  * * Cú pháp khai báo hàm
@@ -191,7 +192,7 @@ function Validator(formSelector) {
                         default:
                             errorMessage = rules[index](event.target.value);
                     };
-                    console.log(errorMessage);
+
                     return errorMessage;
                 });
 
